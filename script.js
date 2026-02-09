@@ -6,19 +6,30 @@ const copyOutput = document.getElementById('copyOutput');
 const clearInput = document.getElementById('clearInput');
 const trimWhitespace = document.getElementById('trimWhitespace');
 const ignoreEmpty = document.getElementById('ignoreEmpty');
+const escapeMode = document.getElementById('escapeMode');
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
 const status = document.getElementById('status');
 const quoteRadios = document.querySelectorAll('input[name="quote"]');
 
-const quoteByType = {
-  single: "'",
-  double: '"'
-};
-
+const quoteByType = { single: "'", double: '"' };
+const THEME_KEY = 'line-quote-theme';
 let statusTimer;
 
 function getQuoteCharacter() {
   const selected = document.querySelector('input[name="quote"]:checked');
   return quoteByType[selected?.value] ?? quoteByType.single;
+}
+
+function escapeLine(line) {
+  const mode = escapeMode.value;
+  if (mode === 'single' || mode === 'both') {
+    line = line.replaceAll("'", "\\'");
+  }
+  if (mode === 'double' || mode === 'both') {
+    line = line.replaceAll('"', '\\"');
+  }
+  return line;
 }
 
 function setStatus(message, duration = 1800) {
@@ -34,24 +45,40 @@ function setStatus(message, duration = 1800) {
 function convertText() {
   const quote = getQuoteCharacter();
   const rawLines = inputText.value.split('\n');
-
   inputLines.textContent = `${rawLines.length} line${rawLines.length === 1 ? '' : 's'}`;
 
   const transformed = [];
   for (let line of rawLines) {
-    if (trimWhitespace.checked) {
-      line = line.trim();
-    }
+    if (trimWhitespace.checked) line = line.trim();
+    if (ignoreEmpty.checked && line.length === 0) continue;
 
-    if (ignoreEmpty.checked && line.length === 0) {
-      continue;
-    }
-
-    transformed.push(`${quote}${line}${quote},`);
+    transformed.push(`${quote}${escapeLine(line)}${quote},`);
   }
 
   outputText.value = transformed.join('\n');
   outputLines.textContent = `${transformed.length} line${transformed.length === 1 ? '' : 's'}`;
+}
+
+function getPreferredTheme() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const useLight = theme === 'dark';
+  themeIcon.textContent = useLight ? '☀️' : '🌙';
+  themeToggle.setAttribute('aria-label', useLight ? 'Switch to light mode' : 'Switch to dark mode');
+  themeToggle.setAttribute('title', useLight ? 'Switch to light mode' : 'Switch to dark mode');
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  applyTheme(nextTheme);
+  localStorage.setItem(THEME_KEY, nextTheme);
+  setStatus(`Switched to ${nextTheme} mode.`);
 }
 
 async function copyToClipboard() {
@@ -80,8 +107,11 @@ function clearAll() {
 inputText.addEventListener('input', convertText);
 trimWhitespace.addEventListener('change', convertText);
 ignoreEmpty.addEventListener('change', convertText);
+escapeMode.addEventListener('change', convertText);
 quoteRadios.forEach((radio) => radio.addEventListener('change', convertText));
 copyOutput.addEventListener('click', copyToClipboard);
 clearInput.addEventListener('click', clearAll);
+themeToggle.addEventListener('click', toggleTheme);
 
+applyTheme(getPreferredTheme());
 convertText();
