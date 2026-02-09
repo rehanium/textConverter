@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Line Quote Converter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1>Line Quote Converter</h1>
+        <p>Convert each line into a quoted string with a trailing comma.</p>
+      </header>
+
+      <section class="controls" aria-label="Conversion settings">
+        <fieldset class="quote-style">
+          <legend>Quote style</legend>
+          <label>
+            <input type="radio" name="quote" value="single" checked />
+            Single quotes
+          </label>
+          <label>
+            <input type="radio" name="quote" value="double" />
+            Double quotes
+          </label>
+        </fieldset>
+
+        <label class="option">
+          <input id="trimWhitespace" type="checkbox" />
+          Trim line whitespace
+        </label>
+
+        <label class="option">
+          <input id="ignoreEmpty" type="checkbox" checked />
+          Ignore empty lines
+        </label>
+
+        <label class="option" for="escapeMode">
+          Escape
+          <select id="escapeMode">
+            <option value="none" selected>None</option>
+            <option value="single">Single quotes only</option>
+            <option value="double">Double quotes only</option>
+            <option value="both">Single and double quotes</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="panes">
+        <article class="pane">
+          <div class="pane-header">
+            <h2>Input</h2>
+            <span id="inputLines" class="count">0 lines</span>
+          </div>
+          <label for="inputText" class="sr-only">Input text</label>
+          <textarea
+            id="inputText"
+            placeholder="Type or paste multi-line text here..."
+            spellcheck="false"
+          ></textarea>
+          <div class="pane-actions">
+            <button id="clearInput" type="button" class="button secondary">Clear Input</button>
+            <button id="copyOutput" type="button" class="button primary">Copy Output</button>
+          </div>
+        </article>
+
+        <article class="pane">
+          <div class="pane-header">
+            <h2>Output</h2>
+            <span id="outputLines" class="count">0 lines</span>
+          </div>
+          <label for="outputText" class="sr-only">Converted output</label>
+          <textarea id="outputText" readonly placeholder="Converted output appears here"></textarea>
+        </article>
+      </section>
+
+      <p id="status" class="status" aria-live="polite"></p>
+    </main>
+
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+      <span id="themeIcon" aria-hidden="true">🌙</span>
+    </button>
+
+    <script src="script.js"></script>
+  </body>
+</html>
