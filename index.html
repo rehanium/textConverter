@@ -36,10 +36,15 @@
           Ignore empty lines
         </label>
 
-        <div class="spacer"></div>
-
-        <button id="clearInput" type="button" class="button secondary">Clear Input</button>
-        <button id="copyOutput" type="button" class="button primary">Copy Output</button>
+        <label class="option" for="escapeMode">
+          Escape
+          <select id="escapeMode">
+            <option value="none" selected>None</option>
+            <option value="single">Single quotes only</option>
+            <option value="double">Double quotes only</option>
+            <option value="both">Single and double quotes</option>
+          </select>
+        </label>
       </section>
 
       <section class="panes">
@@ -54,6 +59,10 @@
             placeholder="Type or paste multi-line text here..."
             spellcheck="false"
           ></textarea>
+          <div class="pane-actions">
+            <button id="clearInput" type="button" class="button secondary">Clear Input</button>
+            <button id="copyOutput" type="button" class="button primary">Copy Output</button>
+          </div>
         </article>
 
         <article class="pane">
@@ -68,6 +77,10 @@
 
       <p id="status" class="status" aria-live="polite"></p>
     </main>
+
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+      <span id="themeIcon" aria-hidden="true">🌙</span>
+    </button>
 
     <script src="script.js"></script>
   </body>
