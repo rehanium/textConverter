@@ -122,31 +122,27 @@
 
       <p id="status" class="status" aria-live="polite"></p>
 
-      <section class="seo-content" aria-label="Salesforce and SEO content">
-        <h2>Built for Salesforce text conversion tasks</h2>
-        <p>
-          This line quote converter helps Salesforce admins, analysts, and developers quickly
-          format one-value-per-line input into quoted, comma-separated output.
-        </p>
-        <ul>
-          <li>Prepare IDs or names for <strong>SOQL IN clauses</strong>.</li>
-          <li>Generate list literals for <strong>Apex</strong> scripts and tests.</li>
-          <li>Clean and normalize lists before <strong>Data Loader</strong> imports.</li>
-          <li>Switch between single and double quotes depending on your workflow.</li>
-        </ul>
+      <details class="seo-content" aria-label="Salesforce and SEO content">
+        <summary>Salesforce use cases</summary>
+        <div class="seo-content-body">
+          <p>
+            This line quote converter helps Salesforce admins, analysts, and developers quickly
+            format one-value-per-line input into quoted, comma-separated output.
+          </p>
+          <ul>
+            <li>Prepare IDs or names for <strong>SOQL IN clauses</strong>.</li>
+            <li>Generate list literals for <strong>Apex</strong> scripts and tests.</li>
+            <li>Clean and normalize lists before <strong>Data Loader</strong> imports.</li>
+            <li>Switch between single and double quotes depending on your workflow.</li>
+          </ul>
 
-        <h3>Common example</h3>
-        <p>
-          Paste:
-          <code>001xx000003DHP0AAO</code>, <code>001xx000003DHP1AAO</code>,
-          <code>001xx000003DHP2AAO</code>
-        </p>
-        <p>
-          Get:
-          <code>'001xx000003DHP0AAO',</code> <code>'001xx000003DHP1AAO',</code>
-          <code>'001xx000003DHP2AAO',</code>
-        </p>
-      </section>
+          <p>
+            Example output:
+            <code>'001xx000003DHP0AAO',</code> <code>'001xx000003DHP1AAO',</code>
+            <code>'001xx000003DHP2AAO',</code>
+          </p>
+        </div>
+      </details>
     </main>
 
     <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
