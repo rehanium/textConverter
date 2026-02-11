@@ -3,16 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Line Quote Converter</title>
+    <title>Line Quote Converter for Salesforce | SOQL & Data Loader Text Formatter</title>
+    <meta
+      name="description"
+      content="Free line quote converter for Salesforce admins and developers. Convert multi-line text into quoted, comma-separated values for SOQL IN clauses, Apex, Data Loader, and spreadsheet workflows."
+    />
+    <meta
+      name="keywords"
+      content="line quote converter, Salesforce text converter, SOQL IN clause formatter, Apex string list converter, Data Loader value formatter, quote each line tool"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Line Quote Converter for Salesforce Tasks" />
+    <meta
+      property="og:description"
+      content="Convert line-by-line text into quoted strings for Salesforce SOQL, Apex, and Data Loader workflows."
+    />
+    <meta property="og:image" content="android-chrome-192x192.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Line Quote Converter for Salesforce Tasks" />
+    <meta
+      name="twitter:description"
+      content="Format line-by-line values into quoted, comma-separated output for SOQL, Apex, and Data Loader use cases."
+    />
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png" />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Line Quote Converter",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "description": "Convert each line into quoted, comma-separated values for Salesforce SOQL, Apex, and Data Loader workflows.",
+        "keywords": "Salesforce, SOQL, Apex, Data Loader, quoted list converter",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c0990da7102f4352a30a8d1178ff3432"}'></script>
   </head>
   <body>
     <main class="app">
       <header class="app-header">
         <h1>Line Quote Converter</h1>
-        <p>Convert each line into a quoted string with a trailing comma.</p>
+        <p>
+          Convert each line into a quoted string with a trailing comma&mdash;ideal for Salesforce
+          SOQL queries, Apex code, and Data Loader value preparation.
+        </p>
       </header>
 
       <section class="controls" aria-label="Conversion settings">
@@ -80,6 +121,32 @@
       </section>
 
       <p id="status" class="status" aria-live="polite"></p>
+
+      <section class="seo-content" aria-label="Salesforce and SEO content">
+        <h2>Built for Salesforce text conversion tasks</h2>
+        <p>
+          This line quote converter helps Salesforce admins, analysts, and developers quickly
+          format one-value-per-line input into quoted, comma-separated output.
+        </p>
+        <ul>
+          <li>Prepare IDs or names for <strong>SOQL IN clauses</strong>.</li>
+          <li>Generate list literals for <strong>Apex</strong> scripts and tests.</li>
+          <li>Clean and normalize lists before <strong>Data Loader</strong> imports.</li>
+          <li>Switch between single and double quotes depending on your workflow.</li>
+        </ul>
+
+        <h3>Common example</h3>
+        <p>
+          Paste:
+          <code>001xx000003DHP0AAO</code>, <code>001xx000003DHP1AAO</code>,
+          <code>001xx000003DHP2AAO</code>
+        </p>
+        <p>
+          Get:
+          <code>'001xx000003DHP0AAO',</code> <code>'001xx000003DHP1AAO',</code>
+          <code>'001xx000003DHP2AAO',</code>
+        </p>
+      </section>
     </main>
 
     <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
