@@ -135,6 +135,64 @@ textarea:focus-visible, .button:focus-visible, input:focus-visible, select:focus
 }
 
 .status { min-height: 1.2rem; margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+.seo-content {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.seo-content summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.seo-content summary::-webkit-details-marker {
+  display: none;
+}
+
+.seo-content summary::after {
+  content: '▾';
+  float: right;
+  transition: transform 0.2s ease;
+}
+
+.seo-content[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.seo-content-body {
+  padding: 0 1rem 1rem;
+}
+
+.seo-content p {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
+.seo-content ul {
+  margin: 0 0 0.9rem 1.2rem;
+  padding: 0;
+}
+
+.seo-content li {
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+}
+
+.seo-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: color-mix(in srgb, var(--surface) 86%, black 5%);
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0.08rem 0.35rem;
+}
+
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 
 @media (max-width: 800px) {
