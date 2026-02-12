@@ -7,11 +7,11 @@ const clearInput = document.getElementById('clearInput');
 const trimWhitespace = document.getElementById('trimWhitespace');
 const ignoreEmpty = document.getElementById('ignoreEmpty');
 const escapeMode = document.getElementById('escapeMode');
-const outputSeparator = document.getElementById('outputSeparator');
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
 const status = document.getElementById('status');
 const quoteRadios = document.querySelectorAll('input[name="quote"]');
+const outputFormatRadios = document.querySelectorAll('input[name="outputFormat"]');
 
 const quoteByType = { single: "'", double: '"' };
 const THEME_KEY = 'line-quote-theme';
@@ -20,6 +20,11 @@ let statusTimer;
 function getQuoteCharacter() {
   const selected = document.querySelector('input[name="quote"]:checked');
   return quoteByType[selected?.value] ?? quoteByType.single;
+}
+
+function getOutputFormat() {
+  const selected = document.querySelector('input[name="outputFormat"]:checked');
+  return selected?.value ?? 'newline';
 }
 
 function escapeLine(line) {
@@ -52,16 +57,18 @@ function convertText() {
   for (let line of rawLines) {
     if (trimWhitespace.checked) line = line.trim();
     
+    // Fixed: Skip empty lines when ignoreEmpty is checked OR when line is empty
     if (ignoreEmpty.checked && line.length === 0) continue;
     
+    // Fixed: Don't add empty quoted strings to output
     if (line.length === 0) continue;
 
     transformed.push(`${quote}${escapeLine(line)}${quote},`);
   }
 
-  const separator = outputSeparator.value === 'space' ? ' ' : '\n';
+  const separator = getOutputFormat() === 'space' ? ' ' : '\n';
   outputText.value = transformed.join(separator);
-  const outputUnit = outputSeparator.value === 'space' ? 'item' : 'line';
+  const outputUnit = getOutputFormat() === 'space' ? 'item' : 'line';
   outputLines.textContent = `${transformed.length} ${outputUnit}${transformed.length === 1 ? '' : 's'}`;
 }
 
@@ -111,15 +118,17 @@ function clearAll() {
   setStatus('Input cleared.');
 }
 
+// Event listeners
 inputText.addEventListener('input', convertText);
 trimWhitespace.addEventListener('change', convertText);
 ignoreEmpty.addEventListener('change', convertText);
 escapeMode.addEventListener('change', convertText);
-outputSeparator.addEventListener('change', convertText);
 quoteRadios.forEach((radio) => radio.addEventListener('change', convertText));
+outputFormatRadios.forEach((radio) => radio.addEventListener('change', convertText));
 copyOutput.addEventListener('click', copyToClipboard);
 clearInput.addEventListener('click', clearAll);
 themeToggle.addEventListener('click', toggleTheme);
 
+// Initialize
 applyTheme(getPreferredTheme());
 convertText();
