@@ -7,6 +7,8 @@
   --border: #d8dce5;
   --primary: #2f6feb;
   --primary-hover: #2358bd;
+  --control-surface: color-mix(in srgb, var(--surface) 92%, #dbe4f5 8%);
+  --control-surface-hover: color-mix(in srgb, var(--surface) 87%, #dbe4f5 13%);
 }
 
 :root[data-theme='light'] {
@@ -64,12 +66,77 @@ body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto
 .quote-style legend { float: left; margin-right: 0.7rem; color: var(--muted); }
 .option { display: flex; align-items: center; gap: 0.45rem; color: var(--muted); }
 
-#escapeMode {
+select {
+  appearance: none;
   border: 1px solid var(--border);
-  border-radius: 0.45rem;
-  padding: 0.3rem 0.45rem;
+  border-radius: 0.6rem;
+  padding: 0.45rem 2rem 0.45rem 0.65rem;
   color: var(--text);
-  background: var(--surface);
+  background:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%) calc(100% - 1rem) calc(50% + 1px) / 7px 7px no-repeat,
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%) calc(100% - 0.7rem) calc(50% + 1px) / 7px 7px no-repeat,
+    var(--control-surface);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+select:hover { background-color: var(--control-surface-hover); }
+
+input[type='radio'],
+input[type='checkbox'] {
+  appearance: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  border: 1px solid color-mix(in srgb, var(--border) 86%, var(--text) 14%);
+  background: var(--control-surface);
+  display: grid;
+  place-items: center;
+  margin: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.12s ease;
+}
+
+input[type='radio'] {
+  border-radius: 50%;
+}
+
+input[type='radio']::before {
+  content: '';
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.12s ease;
+  background: var(--primary);
+}
+
+input[type='radio']:checked::before {
+  transform: scale(1);
+}
+
+input[type='checkbox'] {
+  border-radius: 0.3rem;
+}
+
+input[type='checkbox']::before {
+  content: '';
+  width: 0.58rem;
+  height: 0.58rem;
+  transform: scale(0);
+  transition: transform 0.12s ease;
+  clip-path: polygon(14% 53%, 0 67%, 39% 100%, 100% 26%, 85% 11%, 39% 67%);
+  background: var(--primary);
+}
+
+input[type='checkbox']:checked::before {
+  transform: scale(1);
+}
+
+input[type='radio']:active,
+input[type='checkbox']:active {
+  transform: scale(0.95);
+}
+
+label {
+  font-size: 0.95rem;
 }
 
 .button {
@@ -78,10 +145,12 @@ body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto
   padding: 0.55rem 0.85rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.12s ease;
 }
 .button.primary { background: var(--primary); color: #fff; border-color: transparent; }
 .button.primary:hover, .button.primary:focus-visible { background: var(--primary-hover); }
-.button.secondary { background: transparent; color: var(--text); }
+.button.secondary { background: var(--control-surface); color: var(--text); }
+.button:hover { transform: translateY(-1px); }
 
 .panes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .pane {
@@ -102,12 +171,20 @@ textarea {
   width: 100%;
   height: 100%;
   resize: none;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--text) 12%);
   border-radius: 0.65rem;
   padding: 0.75rem;
   font: 500 0.95rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   color: var(--text);
-  background: color-mix(in srgb, var(--surface) 90%, black 3%);
+  background: var(--control-surface);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+textarea:hover,
+select:hover,
+input[type='radio']:hover,
+input[type='checkbox']:hover {
+  border-color: color-mix(in srgb, var(--border) 40%, var(--primary) 60%);
 }
 
 .pane-actions { display: flex; justify-content: flex-end; gap: 0.6rem; flex-wrap: wrap; }
