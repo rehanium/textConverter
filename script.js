@@ -51,7 +51,10 @@ function convertText() {
   const transformed = [];
   for (let line of rawLines) {
     if (trimWhitespace.checked) line = line.trim();
+    
     if (ignoreEmpty.checked && line.length === 0) continue;
+    
+    if (line.length === 0) continue;
 
     transformed.push(`${quote}${escapeLine(line)}${quote},`);
   }
@@ -70,10 +73,11 @@ function getPreferredTheme() {
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  const useLight = theme === 'dark';
-  themeIcon.textContent = useLight ? '☀️' : '🌙';
-  themeToggle.setAttribute('aria-label', useLight ? 'Switch to light mode' : 'Switch to dark mode');
-  themeToggle.setAttribute('title', useLight ? 'Switch to light mode' : 'Switch to dark mode');
+  const isDark = theme === 'dark';
+  themeIcon.textContent = isDark ? '☀️' : '🌙';
+  const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+  themeToggle.setAttribute('aria-label', label);
+  themeToggle.setAttribute('title', label);
 }
 
 function toggleTheme() {
