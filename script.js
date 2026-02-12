@@ -7,6 +7,7 @@ const clearInput = document.getElementById('clearInput');
 const trimWhitespace = document.getElementById('trimWhitespace');
 const ignoreEmpty = document.getElementById('ignoreEmpty');
 const escapeMode = document.getElementById('escapeMode');
+const outputSeparator = document.getElementById('outputSeparator');
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
 const status = document.getElementById('status');
@@ -55,8 +56,10 @@ function convertText() {
     transformed.push(`${quote}${escapeLine(line)}${quote},`);
   }
 
-  outputText.value = transformed.join('\n');
-  outputLines.textContent = `${transformed.length} line${transformed.length === 1 ? '' : 's'}`;
+  const separator = outputSeparator.value === 'space' ? ' ' : '\n';
+  outputText.value = transformed.join(separator);
+  const outputUnit = outputSeparator.value === 'space' ? 'item' : 'line';
+  outputLines.textContent = `${transformed.length} ${outputUnit}${transformed.length === 1 ? '' : 's'}`;
 }
 
 function getPreferredTheme() {
@@ -108,6 +111,7 @@ inputText.addEventListener('input', convertText);
 trimWhitespace.addEventListener('change', convertText);
 ignoreEmpty.addEventListener('change', convertText);
 escapeMode.addEventListener('change', convertText);
+outputSeparator.addEventListener('change', convertText);
 quoteRadios.forEach((radio) => radio.addEventListener('change', convertText));
 copyOutput.addEventListener('click', copyToClipboard);
 clearInput.addEventListener('click', clearAll);
