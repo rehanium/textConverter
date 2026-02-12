@@ -51,49 +51,57 @@
       <header class="app-header">
         <h1>Line Quote Converter</h1>
         <p>
-          Convert each line into a quoted string with a trailing comma&mdash;ideal for Salesforce
+          Convert each line into a quoted string with a trailing comma, ideal for Salesforce
           SOQL queries, Apex code, and Data Loader value preparation.
         </p>
       </header>
 
       <section class="controls" aria-label="Conversion settings">
-        <fieldset class="quote-style">
-          <legend>Quote style</legend>
-          <label>
-            <input type="radio" name="quote" value="single" checked />
-            Single quotes
-          </label>
-          <label>
-            <input type="radio" name="quote" value="double" />
-            Double quotes
-          </label>
-        </fieldset>
+        <div class="control-group">
+          <span class="control-label">Quote style</span>
+          <div class="quote-options">
+            <label>
+              <input type="radio" name="quote" value="single" checked />
+              Single
+            </label>
+            <label>
+              <input type="radio" name="quote" value="double" />
+              Double
+            </label>
+          </div>
+        </div>
 
-        <label class="option">
+        <div class="control-group">
+          <span class="control-label">Output format</span>
+          <div class="output-format-options">
+            <label>
+              <input type="radio" name="outputFormat" value="newline" checked />
+              New line
+            </label>
+            <label>
+              <input type="radio" name="outputFormat" value="space" />
+              Space
+            </label>
+          </div>
+        </div>
+
+        <label class="control-group">
           <input id="trimWhitespace" type="checkbox" />
-          Trim line whitespace
+          <span class="control-label">Trim whitespace</span>
         </label>
 
-        <label class="option">
+        <label class="control-group">
           <input id="ignoreEmpty" type="checkbox" checked />
-          Ignore empty lines
+          <span class="control-label">Ignore empty lines</span>
         </label>
 
-        <label class="option" for="escapeMode">
-          Escape
+        <label class="control-group" for="escapeMode">
+          <span class="control-label">Escape</span>
           <select id="escapeMode">
             <option value="none" selected>None</option>
-            <option value="single">Single quotes only</option>
-            <option value="double">Double quotes only</option>
-            <option value="both">Single and double quotes</option>
-          </select>
-        </label>
-
-        <label class="option" for="outputSeparator">
-          Output format
-          <select id="outputSeparator">
-            <option value="newline" selected>New line (default)</option>
-            <option value="space">Space separated list</option>
+            <option value="single">Single quotes</option>
+            <option value="double">Double quotes</option>
+            <option value="both">Both quotes</option>
           </select>
         </label>
       </section>
@@ -129,28 +137,6 @@
       </section>
 
       <p id="status" class="status" aria-live="polite"></p>
-
-      <details class="seo-content" aria-label="Salesforce and SEO content">
-        <summary>Salesforce use cases</summary>
-        <div class="seo-content-body">
-          <p>
-            This line quote converter helps Salesforce admins, analysts, and developers quickly
-            format one-value-per-line input into quoted, comma-separated output.
-          </p>
-          <ul>
-            <li>Prepare IDs or names for <strong>SOQL IN clauses</strong>.</li>
-            <li>Generate list literals for <strong>Apex</strong> scripts and tests.</li>
-            <li>Clean and normalize lists before <strong>Data Loader</strong> imports.</li>
-            <li>Switch between single and double quotes depending on your workflow.</li>
-          </ul>
-
-          <p>
-            Example output:
-            <code>'001xx000003DHP0AAO',</code> <code>'001xx000003DHP1AAO',</code>
-            <code>'001xx000003DHP2AAO',</code>
-          </p>
-        </div>
-      </details>
     </main>
 
     <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">
