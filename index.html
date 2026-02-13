@@ -85,6 +85,24 @@
           </div>
         </div>
 
+        <label class="control-group" for="wrapperMode">
+          <span class="control-label">Wrapper</span>
+          <select id="wrapperMode">
+            <option value="none" selected>None</option>
+            <option value="parentheses">( ) Parentheses</option>
+            <option value="braces">{ } Braces</option>
+          </select>
+        </label>
+
+        <label class="control-group" for="sortMode">
+          <span class="control-label">Sort</span>
+          <select id="sortMode">
+            <option value="none" selected>None</option>
+            <option value="asc">A → Z</option>
+            <option value="desc">Z → A</option>
+          </select>
+        </label>
+
         <label class="control-group">
           <input id="trimWhitespace" type="checkbox" />
           <span class="control-label">Trim whitespace</span>
@@ -95,6 +113,11 @@
           <span class="control-label">Ignore empty lines</span>
         </label>
 
+        <label class="control-group">
+          <input id="deduplicate" type="checkbox" />
+          <span class="control-label">Deduplicate</span>
+        </label>
+
         <label class="control-group" for="escapeMode">
           <span class="control-label">Escape</span>
           <select id="escapeMode">
@@ -103,6 +126,17 @@
             <option value="double">Double quotes</option>
             <option value="both">Both quotes</option>
           </select>
+        </label>
+
+        <label class="control-group" for="splitDelimiter">
+          <span class="control-label">Split by</span>
+          <input 
+            id="splitDelimiter" 
+            type="text" 
+            placeholder="Delimiter (e.g., ,)" 
+            maxlength="5"
+            class="delimiter-input"
+          />
         </label>
       </section>
 
@@ -126,7 +160,11 @@
         <article class="pane">
           <div class="pane-header">
             <h2>Output</h2>
-            <span id="outputLines" class="count">0 lines</span>
+            <div class="output-stats">
+              <span id="outputLines" class="count">0 lines</span>
+              <span id="uniqueCount" class="count">0 unique</span>
+              <span id="charCount" class="count">0 characters</span>
+            </div>
           </div>
           <label for="outputText" class="sr-only">Converted output</label>
           <textarea id="outputText" readonly placeholder="Converted output appears here"></textarea>
