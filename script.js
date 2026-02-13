@@ -7,9 +7,15 @@ const clearInput = document.getElementById('clearInput');
 const trimWhitespace = document.getElementById('trimWhitespace');
 const ignoreEmpty = document.getElementById('ignoreEmpty');
 const escapeMode = document.getElementById('escapeMode');
+const deduplicateCheckbox = document.getElementById('deduplicate');
+const sortMode = document.getElementById('sortMode');
+const wrapperMode = document.getElementById('wrapperMode');
+const splitDelimiter = document.getElementById('splitDelimiter');
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
 const status = document.getElementById('status');
+const charCount = document.getElementById('charCount');
+const uniqueCount = document.getElementById('uniqueCount');
 const quoteRadios = document.querySelectorAll('input[name="quote"]');
 const outputFormatRadios = document.querySelectorAll('input[name="outputFormat"]');
 
@@ -48,28 +54,98 @@ function setStatus(message, duration = 1800) {
   }
 }
 
+function splitByDelimiter(text) {
+  const delimiter = splitDelimiter.value;
+  if (!delimiter) return text.split('\n');
+  
+  // Split by delimiter and then by newlines
+  const allItems = [];
+  const lines = text.split('\n');
+  
+  for (const line of lines) {
+    const items = line.split(delimiter);
+    allItems.push(...items);
+  }
+  
+  return allItems;
+}
+
 function convertText() {
   const quote = getQuoteCharacter();
-  const rawLines = inputText.value.split('\n');
+  const rawInput = inputText.value;
+  
+  // Split by delimiter if specified, otherwise by newline
+  let rawLines = splitByDelimiter(rawInput);
+  
   inputLines.textContent = `${rawLines.length} line${rawLines.length === 1 ? '' : 's'}`;
 
-  const transformed = [];
+  let transformed = [];
+  let uniqueValues = new Set();
+  
   for (let line of rawLines) {
     if (trimWhitespace.checked) line = line.trim();
     
-    // Fixed: Skip empty lines when ignoreEmpty is checked OR when line is empty
+    // Skip empty lines only when ignoreEmpty is checked
     if (ignoreEmpty.checked && line.length === 0) continue;
     
-    // Fixed: Don't add empty quoted strings to output
-    if (line.length === 0) continue;
-
-    transformed.push(`${quote}${escapeLine(line)}${quote},`);
+    uniqueValues.add(line);
+    transformed.push(line);
   }
 
+  // Deduplicate if checked
+  if (deduplicateCheckbox.checked) {
+    transformed = Array.from(new Set(transformed));
+  }
+
+  // Sort if selected
+  const sort = sortMode.value;
+  if (sort === 'asc') {
+    transformed.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+  } else if (sort === 'desc') {
+    transformed.sort((a, b) => b.localeCompare(a, undefined, { sensitivity: 'base' }));
+  }
+
+  // Add quotes and escape
+  const quotedItems = transformed.map(line => `${quote}${escapeLine(line)}${quote}`);
+  
+  // Join with separator
   const separator = getOutputFormat() === 'space' ? ' ' : '\n';
-  outputText.value = transformed.join(separator);
+  let output = quotedItems.join(`,${separator}`);
+  
+  // Apply wrapper
+  const wrapper = wrapperMode.value;
+  if (wrapper === 'parentheses') {
+    output = `(${output})`;
+  } else if (wrapper === 'braces') {
+    output = `{${output}}`;
+  }
+  
+  outputText.value = output;
+  
+  // Update stats
   const outputUnit = getOutputFormat() === 'space' ? 'item' : 'line';
   outputLines.textContent = `${transformed.length} ${outputUnit}${transformed.length === 1 ? '' : 's'}`;
+  
+  // Character count with warning
+  const charCountValue = output.length;
+  charCount.textContent = `${charCountValue} characters`;
+  if (charCountValue > 4000) {
+    charCount.className = 'count warning';
+    charCount.title = 'Warning: Exceeds SOQL query limit of 4,000 characters';
+  } else {
+    charCount.className = 'count';
+    charCount.title = '';
+  }
+  
+  // Unique count
+  uniqueCount.textContent = `${uniqueValues.size} unique`;
+  if (uniqueValues.size < rawLines.length - (ignoreEmpty.checked ? rawLines.filter(l => !l.trim()).length : 0)) {
+    uniqueCount.className = 'count info';
+    uniqueCount.title = `${rawLines.length - uniqueValues.size} duplicate${rawLines.length - uniqueValues.size === 1 ? '' : 's'} found`;
+  } else {
+    uniqueCount.className = 'count';
+    uniqueCount.title = '';
+  }
 }
 
 function getPreferredTheme() {
@@ -123,6 +199,10 @@ inputText.addEventListener('input', convertText);
 trimWhitespace.addEventListener('change', convertText);
 ignoreEmpty.addEventListener('change', convertText);
 escapeMode.addEventListener('change', convertText);
+deduplicateCheckbox.addEventListener('change', convertText);
+sortMode.addEventListener('change', convertText);
+wrapperMode.addEventListener('change', convertText);
+splitDelimiter.addEventListener('input', convertText);
 quoteRadios.forEach((radio) => radio.addEventListener('change', convertText));
 outputFormatRadios.forEach((radio) => radio.addEventListener('change', convertText));
 copyOutput.addEventListener('click', copyToClipboard);
