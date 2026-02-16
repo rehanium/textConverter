@@ -3,28 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Line Quote Converter for Salesforce | SOQL & Data Loader Text Formatter</title>
+    <title>Salesforce Text & ID Converter | SOQL Formatter, Record ID Converter & Data Tool</title>
     <meta
       name="description"
-      content="Free line quote converter for Salesforce admins and developers. Convert multi-line text into quoted, comma-separated values for SOQL IN clauses, Apex, Data Loader, and spreadsheet workflows."
+      content="Free Salesforce text and ID converter for admins and developers. Convert text to quoted lists for SOQL IN clauses, convert Record IDs between 15 and 18 characters, deduplicate, sort, and format data for Apex, Data Loader, and spreadsheets."
     />
     <meta
       name="keywords"
-      content="line quote converter, Salesforce text converter, SOQL IN clause formatter, Apex string list converter, Data Loader value formatter, quote each line tool"
+      content="Salesforce text converter, SOQL formatter, Record ID converter, 15 to 18 character ID, Salesforce ID converter, SOQL IN clause, Apex formatter, Data Loader tool, deduplicate Salesforce data, sort Salesforce IDs"
     />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Line Quote Converter for Salesforce Tasks" />
+    <meta property="og:title" content="Salesforce Text & ID Converter | SOQL & Apex Formatter" />
     <meta
       property="og:description"
-      content="Convert line-by-line text into quoted strings for Salesforce SOQL, Apex, and Data Loader workflows."
+      content="Convert text to quoted lists, convert Record IDs (15↔18 chars), deduplicate, sort, and format data for Salesforce SOQL, Apex, and Data Loader."
     />
     <meta property="og:image" content="android-chrome-192x192.png" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Line Quote Converter for Salesforce Tasks" />
+    <meta name="twitter:title" content="Salesforce Text & ID Converter | SOQL & Apex Formatter" />
     <meta
       name="twitter:description"
-      content="Format line-by-line values into quoted, comma-separated output for SOQL, Apex, and Data Loader use cases."
+      content="Convert text to quoted lists, convert Record IDs (15↔18 chars), deduplicate, sort, and format data for Salesforce workflows."
     />
     <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png" />
     <link rel="stylesheet" href="styles.css" />
@@ -32,11 +32,11 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Line Quote Converter",
+        "name": "Salesforce Text & ID Converter",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
-        "description": "Convert each line into quoted, comma-separated values for Salesforce SOQL, Apex, and Data Loader workflows.",
-        "keywords": "Salesforce, SOQL, Apex, Data Loader, quoted list converter",
+        "description": "Convert text to quoted comma-separated values for Salesforce SOQL queries and Apex code. Features include Record ID conversion (15↔18 characters), deduplication, sorting, delimiter splitting, and SOQL character limit warnings.",
+        "keywords": "Salesforce, SOQL, Apex, Data Loader, Record ID converter, 15 to 18 character ID, text formatter, deduplicate",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -49,10 +49,11 @@
   <body>
     <main class="app">
       <header class="app-header">
-        <h1>Line Quote Converter</h1>
+        <h1>Salesforce Text & ID Converter</h1>
         <p>
-          Convert each line into a quoted string with a trailing comma, ideal for Salesforce
-          SOQL queries, Apex code, and Data Loader value preparation.
+          Professional text formatter for Salesforce developers and admins. Convert multi-line text into quoted, 
+          comma-separated values for SOQL queries and Apex code. Features include deduplication, sorting, 
+          delimiter splitting, SOQL character limit warnings, and automatic Salesforce Record ID conversion (15 ↔ 18 characters).
         </p>
       </header>
 
@@ -144,7 +145,10 @@
         <article class="pane">
           <div class="pane-header">
             <h2>Input</h2>
-            <span id="inputLines" class="count">0 lines</span>
+            <div class="input-stats">
+              <span id="inputLines" class="count">0 lines</span>
+              <span id="idDetection" class="count id-badge" style="display: none;"></span>
+            </div>
           </div>
           <label for="inputText" class="sr-only">Input text</label>
           <textarea
@@ -153,6 +157,9 @@
             spellcheck="false"
           ></textarea>
           <div class="pane-actions">
+            <button id="convertIds" type="button" class="button secondary id-convert-btn" style="display: none;">
+              Convert IDs
+            </button>
             <button id="clearInput" type="button" class="button secondary">Clear Input</button>
           </div>
         </article>
@@ -175,6 +182,63 @@
       </section>
 
       <p id="status" class="status" aria-live="polite"></p>
+
+      <section class="features-section">
+        <h2>Features</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3>📝 Text to Quoted List</h3>
+            <p>Convert multi-line text into quoted, comma-separated values perfect for SOQL IN clauses and Apex collections.</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>🔄 Record ID Converter</h3>
+            <p>Automatically detects and converts Salesforce Record IDs between 15 and 18 character formats with one click.</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>🎯 Deduplicate & Sort</h3>
+            <p>Remove duplicate values and sort alphabetically (A→Z or Z→A) for cleaner, organized data.</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>📦 Wrapper Templates</h3>
+            <p>Automatically wrap output in parentheses <code>()</code> for SOQL or braces <code>{}</code> for Apex collections.</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>✂️ Delimiter Splitting</h3>
+            <p>Split comma, tab, or custom delimited input into separate lines before processing.</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>⚠️ SOQL Limit Warning</h3>
+            <p>Visual alert when output exceeds 4,000 characters (Salesforce SOQL query limit).</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>🔍 Smart Statistics</h3>
+            <p>Track line count, unique values, character count, and automatically detect Record IDs in your input.</p>
+          </div>
+          
+          <div class="feature-card">
+            <h3>⚙️ Customization Options</h3>
+            <p>Single/double quotes, newline/space separation, whitespace trimming, empty line handling, and quote escaping.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="use-cases-section">
+        <h2>Common Use Cases</h2>
+        <ul class="use-cases-list">
+          <li><strong>SOQL Queries:</strong> Create IN clauses from Excel columns or CSV data</li>
+          <li><strong>Apex Development:</strong> Generate List&lt;String&gt; or Set&lt;String&gt; declarations</li>
+          <li><strong>Data Loader:</strong> Format values for bulk operations and filtering</li>
+          <li><strong>Record ID Management:</strong> Convert between 15 and 18 character ID formats for API integration</li>
+          <li><strong>Data Cleanup:</strong> Deduplicate and sort lists from reports or exports</li>
+          <li><strong>Spreadsheet Import:</strong> Prepare data from Excel/Google Sheets for Salesforce</li>
+        </ul>
+      </section>
     </main>
 
     <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">

@@ -16,12 +16,112 @@ const themeIcon = document.getElementById('themeIcon');
 const status = document.getElementById('status');
 const charCount = document.getElementById('charCount');
 const uniqueCount = document.getElementById('uniqueCount');
+const idDetection = document.getElementById('idDetection');
+const convertIdsBtn = document.getElementById('convertIds');
 const quoteRadios = document.querySelectorAll('input[name="quote"]');
 const outputFormatRadios = document.querySelectorAll('input[name="outputFormat"]');
 
 const quoteByType = { single: "'", double: '"' };
 const THEME_KEY = 'line-quote-theme';
 let statusTimer;
+let detectedIdType = null; // '15' or '18' or null
+
+// Salesforce ID validation and conversion
+const SFID_15_REGEX = /^[a-zA-Z0-9]{15}$/;
+const SFID_18_REGEX = /^[a-zA-Z0-9]{18}$/;
+
+function isValidSalesforceId(id) {
+  return SFID_15_REGEX.test(id) || SFID_18_REGEX.test(id);
+}
+
+function convert15to18(id15) {
+  if (id15.length !== 15) return id15;
+  
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ012345';
+  let suffix = '';
+  
+  for (let i = 0; i < 3; i++) {
+    let flags = 0;
+    for (let j = 0; j < 5; j++) {
+      const c = id15.charAt(i * 5 + j);
+      if (c >= 'A' && c <= 'Z') {
+        flags += 1 << j;
+      }
+    }
+    suffix += chars.charAt(flags);
+  }
+  
+  return id15 + suffix;
+}
+
+function convert18to15(id18) {
+  if (id18.length !== 18) return id18;
+  return id18.substring(0, 15);
+}
+
+function detectSalesforceIds(text) {
+  const lines = text.split('\n');
+  let count15 = 0;
+  let count18 = 0;
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (SFID_15_REGEX.test(trimmed)) count15++;
+    if (SFID_18_REGEX.test(trimmed)) count18++;
+  }
+  
+  const total = count15 + count18;
+  if (total === 0) return null;
+  
+  // Determine predominant type
+  if (count15 > count18) return { type: '15', count: total };
+  if (count18 > count15) return { type: '18', count: total };
+  return { type: '15', count: total }; // Default to 15 if equal
+}
+
+function updateIdDetection() {
+  const detection = detectSalesforceIds(inputText.value);
+  
+  if (detection) {
+    detectedIdType = detection.type;
+    const targetType = detection.type === '15' ? '18' : '15';
+    idDetection.textContent = `${detection.count} ID${detection.count > 1 ? 's' : ''} detected`;
+    idDetection.style.display = 'inline-block';
+    convertIdsBtn.textContent = `Convert IDs: ${detection.type}→${targetType}`;
+    convertIdsBtn.style.display = 'inline-block';
+  } else {
+    detectedIdType = null;
+    idDetection.style.display = 'none';
+    convertIdsBtn.style.display = 'none';
+  }
+}
+
+function convertSalesforceIds() {
+  if (!detectedIdType) return;
+  
+  const lines = inputText.value.split('\n');
+  const converted = lines.map(line => {
+    const trimmed = line.trim();
+    
+    if (detectedIdType === '15' && SFID_15_REGEX.test(trimmed)) {
+      const id18 = convert15to18(trimmed);
+      return line.replace(trimmed, id18);
+    }
+    
+    if (detectedIdType === '18' && SFID_18_REGEX.test(trimmed)) {
+      const id15 = convert18to15(trimmed);
+      return line.replace(trimmed, id15);
+    }
+    
+    return line;
+  });
+  
+  inputText.value = converted.join('\n');
+  const targetType = detectedIdType === '15' ? '18' : '15';
+  setStatus(`Converted to ${targetType}-character IDs.`);
+  updateIdDetection();
+  convertText();
+}
 
 function getQuoteCharacter() {
   const selected = document.querySelector('input[name="quote"]:checked');
@@ -73,6 +173,9 @@ function splitByDelimiter(text) {
 function convertText() {
   const quote = getQuoteCharacter();
   const rawInput = inputText.value;
+  
+  // Update ID detection
+  updateIdDetection();
   
   // Split by delimiter if specified, otherwise by newline
   let rawLines = splitByDelimiter(rawInput);
@@ -208,6 +311,7 @@ outputFormatRadios.forEach((radio) => radio.addEventListener('change', convertTe
 copyOutput.addEventListener('click', copyToClipboard);
 clearInput.addEventListener('click', clearAll);
 themeToggle.addEventListener('click', toggleTheme);
+convertIdsBtn.addEventListener('click', convertSalesforceIds);
 
 // Initialize
 applyTheme(getPreferredTheme());
