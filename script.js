@@ -23,8 +23,94 @@ const outputFormatRadios = document.querySelectorAll('input[name="outputFormat"]
 
 const quoteByType = { single: "'", double: '"' };
 const THEME_KEY = 'line-quote-theme';
+const PREFERENCES_KEY = 'salesforce-converter-preferences';
 let statusTimer;
 let detectedIdType = null; // '15' or '18' or null
+
+// Preferences management
+function savePreferences() {
+  const preferences = {
+    quoteStyle: document.querySelector('input[name="quote"]:checked')?.value || 'single',
+    outputFormat: document.querySelector('input[name="outputFormat"]:checked')?.value || 'newline',
+    wrapperMode: wrapperMode.value,
+    sortMode: sortMode.value,
+    trimWhitespace: trimWhitespace.checked,
+    ignoreEmpty: ignoreEmpty.checked,
+    deduplicate: deduplicateCheckbox.checked,
+    escapeMode: escapeMode.value,
+    splitDelimiter: splitDelimiter.value
+  };
+  
+  localStorage.setItem(PREFERENCES_KEY, JSON.stringify(preferences));
+  
+  const saveBtn = document.getElementById('savePreferences');
+  const resetBtn = document.getElementById('resetPreferences');
+  
+  saveBtn.classList.add('saved');
+  saveBtn.textContent = '✓ Saved';
+  resetBtn.style.display = 'inline-block';
+  
+  setStatus('Preferences saved for next visit.');
+  
+  setTimeout(() => {
+    saveBtn.classList.remove('saved');
+    saveBtn.textContent = '💾 Save Settings';
+  }, 2000);
+}
+
+function loadPreferences() {
+  const saved = localStorage.getItem(PREFERENCES_KEY);
+  if (!saved) return false;
+  
+  try {
+    const preferences = JSON.parse(saved);
+    
+    // Apply quote style
+    const quoteRadio = document.querySelector(`input[name="quote"][value="${preferences.quoteStyle}"]`);
+    if (quoteRadio) quoteRadio.checked = true;
+    
+    // Apply output format
+    const formatRadio = document.querySelector(`input[name="outputFormat"][value="${preferences.outputFormat}"]`);
+    if (formatRadio) formatRadio.checked = true;
+    
+    // Apply other settings
+    wrapperMode.value = preferences.wrapperMode || 'none';
+    sortMode.value = preferences.sortMode || 'none';
+    trimWhitespace.checked = preferences.trimWhitespace || false;
+    ignoreEmpty.checked = preferences.ignoreEmpty !== undefined ? preferences.ignoreEmpty : true;
+    deduplicateCheckbox.checked = preferences.deduplicate || false;
+    escapeMode.value = preferences.escapeMode || 'none';
+    splitDelimiter.value = preferences.splitDelimiter || '';
+    
+    // Show reset button
+    document.getElementById('resetPreferences').style.display = 'inline-block';
+    
+    return true;
+  } catch (e) {
+    console.error('Failed to load preferences:', e);
+    return false;
+  }
+}
+
+function resetPreferences() {
+  localStorage.removeItem(PREFERENCES_KEY);
+  
+  // Reset to defaults
+  document.querySelector('input[name="quote"][value="single"]').checked = true;
+  document.querySelector('input[name="outputFormat"][value="newline"]').checked = true;
+  wrapperMode.value = 'none';
+  sortMode.value = 'none';
+  trimWhitespace.checked = false;
+  ignoreEmpty.checked = true;
+  deduplicateCheckbox.checked = false;
+  escapeMode.value = 'none';
+  splitDelimiter.value = '';
+  
+  document.getElementById('resetPreferences').style.display = 'none';
+  
+  setStatus('Preferences reset to defaults.');
+  convertText();
+}
 
 // Salesforce ID validation and conversion
 const SFID_15_REGEX = /^[a-zA-Z0-9]{15}$/;
@@ -312,7 +398,10 @@ copyOutput.addEventListener('click', copyToClipboard);
 clearInput.addEventListener('click', clearAll);
 themeToggle.addEventListener('click', toggleTheme);
 convertIdsBtn.addEventListener('click', convertSalesforceIds);
+document.getElementById('savePreferences').addEventListener('click', savePreferences);
+document.getElementById('resetPreferences').addEventListener('click', resetPreferences);
 
 // Initialize
 applyTheme(getPreferredTheme());
+loadPreferences(); // Load saved preferences
 convertText();
