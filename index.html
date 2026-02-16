@@ -57,99 +57,6 @@
         </p>
       </header>
 
-      <section class="controls" aria-label="Conversion settings">
-        <div class="control-group">
-          <span class="control-label">Quote style</span>
-          <div class="quote-options">
-            <label>
-              <input type="radio" name="quote" value="single" checked />
-              Single
-            </label>
-            <label>
-              <input type="radio" name="quote" value="double" />
-              Double
-            </label>
-          </div>
-        </div>
-
-        <div class="control-group">
-          <span class="control-label">Output format</span>
-          <div class="output-format-options">
-            <label>
-              <input type="radio" name="outputFormat" value="newline" checked />
-              New line
-            </label>
-            <label>
-              <input type="radio" name="outputFormat" value="space" />
-              Space
-            </label>
-          </div>
-        </div>
-
-        <label class="control-group" for="wrapperMode">
-          <span class="control-label">Wrapper</span>
-          <select id="wrapperMode">
-            <option value="none" selected>None</option>
-            <option value="parentheses">( ) Parentheses</option>
-            <option value="braces">{ } Braces</option>
-          </select>
-        </label>
-
-        <label class="control-group" for="sortMode">
-          <span class="control-label">Sort</span>
-          <select id="sortMode">
-            <option value="none" selected>None</option>
-            <option value="asc">A → Z</option>
-            <option value="desc">Z → A</option>
-          </select>
-        </label>
-
-        <label class="control-group">
-          <input id="trimWhitespace" type="checkbox" />
-          <span class="control-label">Trim whitespace</span>
-        </label>
-
-        <label class="control-group">
-          <input id="ignoreEmpty" type="checkbox" checked />
-          <span class="control-label">Ignore empty lines</span>
-        </label>
-
-        <label class="control-group">
-          <input id="deduplicate" type="checkbox" />
-          <span class="control-label">Deduplicate</span>
-        </label>
-
-        <label class="control-group" for="escapeMode">
-          <span class="control-label">Escape</span>
-          <select id="escapeMode">
-            <option value="none" selected>None</option>
-            <option value="single">Single quotes</option>
-            <option value="double">Double quotes</option>
-            <option value="both">Both quotes</option>
-          </select>
-        </label>
-
-        <label class="control-group" for="splitDelimiter">
-          <span class="control-label">Split by</span>
-          <input 
-            id="splitDelimiter" 
-            type="text" 
-            placeholder="Delimiter (e.g., ,)" 
-            maxlength="5"
-            class="delimiter-input"
-          />
-        </label>
-
-        <div class="control-group preferences-control">
-          <button id="savePreferences" type="button" class="button secondary preferences-btn">
-            💾 Save Settings
-          </button>
-          <button id="resetPreferences" type="button" class="button secondary preferences-btn" style="display: none;">
-            🔄 Reset
-          </button>
-        </div>
-      </section>
-
       <section class="panes">
         <article class="pane">
           <div class="pane-header">
@@ -188,6 +95,117 @@
             <button id="copyOutput" type="button" class="button primary">Copy Output</button>
           </div>
         </article>
+      </section>
+
+      <section class="controls" aria-label="Conversion settings">
+        <div class="controls-header">
+          <h2 class="controls-title">Settings</h2>
+          <div class="controls-actions">
+            <button id="savePreferences" type="button" class="button secondary compact-btn">
+              💾 Save
+            </button>
+            <button id="resetPreferences" type="button" class="button secondary compact-btn" style="display: none;">
+              🔄 Reset
+            </button>
+            <button id="toggleControls" type="button" class="button secondary compact-btn">
+              ▼ Collapse
+            </button>
+          </div>
+        </div>
+
+        <div id="controlsContent" class="controls-content">
+          <div class="control-section">
+            <h3 class="section-title">Format</h3>
+            <div class="control-row">
+              <div class="control-group compact">
+                <span class="control-label">Quote</span>
+                <div class="quote-options">
+                  <label>
+                    <input type="radio" name="quote" value="single" checked />
+                    Single
+                  </label>
+                  <label>
+                    <input type="radio" name="quote" value="double" />
+                    Double
+                  </label>
+                </div>
+              </div>
+
+              <div class="control-group compact">
+                <span class="control-label">Output</span>
+                <div class="output-format-options">
+                  <label>
+                    <input type="radio" name="outputFormat" value="newline" checked />
+                    Lines
+                  </label>
+                  <label>
+                    <input type="radio" name="outputFormat" value="space" />
+                    Space
+                  </label>
+                </div>
+              </div>
+
+              <label class="control-group compact" for="wrapperMode">
+                <span class="control-label">Wrap</span>
+                <select id="wrapperMode">
+                  <option value="none" selected>None</option>
+                  <option value="parentheses">( )</option>
+                  <option value="braces">{ }</option>
+                </select>
+              </label>
+
+              <label class="control-group compact" for="escapeMode">
+                <span class="control-label">Escape</span>
+                <select id="escapeMode">
+                  <option value="none" selected>None</option>
+                  <option value="single">Single</option>
+                  <option value="double">Double</option>
+                  <option value="both">Both</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3 class="section-title">Processing</h3>
+            <div class="control-row">
+              <label class="control-group compact checkbox-group">
+                <input id="trimWhitespace" type="checkbox" />
+                <span class="control-label">Trim</span>
+              </label>
+
+              <label class="control-group compact checkbox-group">
+                <input id="ignoreEmpty" type="checkbox" checked />
+                <span class="control-label">Ignore Empty</span>
+              </label>
+
+              <label class="control-group compact checkbox-group">
+                <input id="deduplicate" type="checkbox" />
+                <span class="control-label">Deduplicate</span>
+              </label>
+
+              <label class="control-group compact" for="sortMode">
+                <span class="control-label">Sort</span>
+                <select id="sortMode">
+                  <option value="none" selected>None</option>
+                  <option value="asc">A→Z</option>
+                  <option value="desc">Z→A</option>
+                </select>
+              </label>
+
+              <label class="control-group compact" for="splitDelimiter">
+                <span class="control-label">Split by</span>
+                <input 
+                  id="splitDelimiter" 
+                  type="text" 
+                  placeholder="e.g., ," 
+                  maxlength="5"
+                  class="delimiter-input compact"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
       </section>
 
       <p id="status" class="status" aria-live="polite"></p>

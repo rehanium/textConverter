@@ -38,7 +38,8 @@ function savePreferences() {
     ignoreEmpty: ignoreEmpty.checked,
     deduplicate: deduplicateCheckbox.checked,
     escapeMode: escapeMode.value,
-    splitDelimiter: splitDelimiter.value
+    splitDelimiter: splitDelimiter.value,
+    controlsCollapsed: document.getElementById('controlsContent').classList.contains('collapsed')
   };
   
   localStorage.setItem(PREFERENCES_KEY, JSON.stringify(preferences));
@@ -54,7 +55,7 @@ function savePreferences() {
   
   setTimeout(() => {
     saveBtn.classList.remove('saved');
-    saveBtn.textContent = '💾 Save Settings';
+    saveBtn.textContent = '💾 Save';
   }, 2000);
 }
 
@@ -82,6 +83,12 @@ function loadPreferences() {
     escapeMode.value = preferences.escapeMode || 'none';
     splitDelimiter.value = preferences.splitDelimiter || '';
     
+    // Apply collapsed state
+    if (preferences.controlsCollapsed) {
+      document.getElementById('controlsContent').classList.add('collapsed');
+      document.getElementById('toggleControls').textContent = '▶ Expand';
+    }
+    
     // Show reset button
     document.getElementById('resetPreferences').style.display = 'inline-block';
     
@@ -106,10 +113,29 @@ function resetPreferences() {
   escapeMode.value = 'none';
   splitDelimiter.value = '';
   
+  // Expand controls
+  const content = document.getElementById('controlsContent');
+  const toggleBtn = document.getElementById('toggleControls');
+  content.classList.remove('collapsed');
+  toggleBtn.textContent = '▼ Collapse';
+  
   document.getElementById('resetPreferences').style.display = 'none';
   
   setStatus('Preferences reset to defaults.');
   convertText();
+}
+
+function toggleControls() {
+  const content = document.getElementById('controlsContent');
+  const toggleBtn = document.getElementById('toggleControls');
+  
+  content.classList.toggle('collapsed');
+  
+  if (content.classList.contains('collapsed')) {
+    toggleBtn.textContent = '▶ Expand';
+  } else {
+    toggleBtn.textContent = '▼ Collapse';
+  }
 }
 
 // Salesforce ID validation and conversion
@@ -400,6 +426,7 @@ themeToggle.addEventListener('click', toggleTheme);
 convertIdsBtn.addEventListener('click', convertSalesforceIds);
 document.getElementById('savePreferences').addEventListener('click', savePreferences);
 document.getElementById('resetPreferences').addEventListener('click', resetPreferences);
+document.getElementById('toggleControls').addEventListener('click', toggleControls);
 
 // Initialize
 applyTheme(getPreferredTheme());
